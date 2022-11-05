@@ -21,7 +21,7 @@ local MAX_DISTANCE = 100
 local Controls = PlayerModule:GetControls()
 local Mouse = Input.Mouse.new()
 
-local cameraStartSpot = workspace:WaitForChild("CameraStartSpot")
+local cameraStartSpot: BasePart = workspace:WaitForChild("CameraStartSpot")
 local startPosition = cameraStartSpot.Position
 local startCFrame = CFrame.new(Vector3.new(startPosition.X, 0, startPosition.Z)) * YAW
 

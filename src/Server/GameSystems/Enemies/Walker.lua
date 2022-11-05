@@ -47,8 +47,8 @@ function Walker:UpdateNode()
 	self._previousNode += 1
 	self._nextNode += 1
 
-	local nextNode = nodes:FindFirstChild(self._nextNode)
-	local previousNode = nodes:FindFirstChild(self._previousNode)
+	local nextNode: BasePart = nodes:FindFirstChild(self._nextNode)
+	local previousNode: BasePart = nodes:FindFirstChild(self._previousNode)
 
 	if not nextNode then
 		return
@@ -75,7 +75,7 @@ function Walker:UpdateNode()
 end
 
 function Walker:Move()
-	local nextNode = nodes:FindFirstChild(self._nextNode)
+	local nextNode: BasePart = nodes:FindFirstChild(self._nextNode)
 
 	if not nextNode then
 		self.Instance:Destroy()
