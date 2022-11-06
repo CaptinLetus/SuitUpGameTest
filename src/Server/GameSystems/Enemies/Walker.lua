@@ -15,9 +15,19 @@ function Walker:Construct()
 	self._previousNode = 0
 	self._nextNode = 1
 
+	self._t = 0
+	self._startAt = 0
+
 	self._humanoid = self.Instance:WaitForChild("Humanoid")
 
+	self:UpdateAttributes()
+
 	self:CreateBodyMovers()
+end
+
+function Walker:UpdateAttributes()
+	self.Instance:SetAttribute("PreviousNode", self._previousNode)
+	self.Instance:SetAttribute("NextNode", self._nextNode)
 end
 
 function Walker:CreateBodyMovers()
@@ -46,6 +56,8 @@ end
 function Walker:UpdateNode()
 	self._previousNode += 1
 	self._nextNode += 1
+
+	self:UpdateAttributes()
 
 	local nextNode: BasePart = nodes:FindFirstChild(self._nextNode)
 	local previousNode: BasePart = nodes:FindFirstChild(self._previousNode)
@@ -90,10 +102,20 @@ function Walker:Move()
 
 	self._bodyVelocity.Velocity = (nextNode.Position - rootPosition) / t
 
+	self._t = t
+	self._startAt = os.clock()
+
 	task.delay(t, function()
 		self:UpdateNode()
 		self:Move()
 	end)
+end
+
+function Walker:HeartbeatUpdate()
+	local now = os.clock()
+	local percentToTextNode = (now - self._startAt) / self._t
+
+	self.Instance:SetAttribute("ProgressAlongTrack", self._previousNode + percentToTextNode)
 end
 
 return Walker

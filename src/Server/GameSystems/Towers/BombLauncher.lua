@@ -30,6 +30,9 @@ end
 function BombLauncher:SelectEnemy()
 	local allEnemies = CollectionService:GetTagged("Enemy")
 
+	local selectedEnemy = nil
+	local selectedDistance = 0
+
 	for _, enemy: Model in allEnemies do
 		local distance = (enemy.PrimaryPart.Position - self.Instance.PrimaryPart.Position).Magnitude
 
@@ -37,8 +40,15 @@ function BombLauncher:SelectEnemy()
 			continue
 		end
 
-		return enemy
+		local progress = enemy:GetAttribute("ProgressAlongTrack") or 0
+
+		if progress > selectedDistance then
+			selectedEnemy = enemy
+			selectedDistance = progress
+		end
 	end
+
+	return selectedEnemy
 end
 
 function BombLauncher:TargetEnemy()
