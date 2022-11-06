@@ -32,6 +32,9 @@ function InterfaceFrame:render()
 			Size = UDim2.fromScale(0.2, 0.1),
 			BackgroundTransparency = 1,
 		}, {
+			AspectRatio = Roact.createElement("UIAspectRatioConstraint", {
+				AspectRatio = 5,
+			}),
 			Currency = Roact.createElement(Panel, {
 				size = UDim2.fromScale(0.5, 1),
 				layoutOrder = 1,

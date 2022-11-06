@@ -1,4 +1,5 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local StarterGui = game:GetService("StarterGui")
 
 local Knit = require(ReplicatedStorage.Packages.Knit)
 local Roact = require(ReplicatedStorage.Packages.Roact)
@@ -17,6 +18,8 @@ function InterfaceController:KnitInit()
 		Knit.Player.PlayerGui,
 		"Interface"
 	)
+
+	StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.All, false)
 end
 
 function InterfaceController:KnitStart()

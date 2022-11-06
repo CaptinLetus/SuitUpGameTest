@@ -6,6 +6,7 @@ local InterfaceFrame = require(script.Parent.InterfaceFrame)
 return function(props)
 	return Roact.createElement("ScreenGui", {
 		ResetOnSpawn = false,
+		IgnoreGuiInset = true,
 	}, {
 		InterfaceFrame = Roact.createElement(InterfaceFrame, {
 			viewModel = props.viewModel,
