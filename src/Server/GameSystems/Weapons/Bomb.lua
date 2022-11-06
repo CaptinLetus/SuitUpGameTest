@@ -36,7 +36,6 @@ function Bomb:DamageEnemies()
 			continue
 		end
 
-		print("hit")
 		humanoid:TakeDamage(DAMAGE)
 	end
 end
