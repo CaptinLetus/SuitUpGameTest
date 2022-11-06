@@ -37,7 +37,6 @@ function BombLauncher:SelectEnemy()
 	end
 end
 
-
 function BombLauncher:TargetEnemy()
 	local selectedEnemy = self:SelectEnemy()
 
@@ -56,10 +55,7 @@ function BombLauncher:PointTowardsEnemy()
 		return
 	end
 
-	local lookAtCF = CFrame.lookAt(
-		primaryPart.Position,
-		selectedEnemy.PrimaryPart.Position
-	)
+	local lookAtCF = CFrame.lookAt(primaryPart.Position, selectedEnemy.PrimaryPart.Position)
 
 	-- make sure we only rotate around the y axis
 	local _, y = lookAtCF:ToEulerAnglesYXZ()
@@ -71,9 +67,5 @@ end
 function BombLauncher:SteppedUpdate()
 	self:PointTowardsEnemy()
 end
-
-
-
-
 
 return BombLauncher
