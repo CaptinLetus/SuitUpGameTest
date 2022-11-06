@@ -8,6 +8,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Component = require(ReplicatedStorage.Packages.Component)
 local Timer = require(ReplicatedStorage.Packages.Timer)
 local TroveAdder = require(ReplicatedStorage.ComponentExtensions.TroveAdder)
+local Tower = require(script.Parent.Tower)
 
 local UPDATE_INTERVAL = 0.2
 local BombLauncher = Component.new({ Tag = "BombLauncher", Extensions = { TroveAdder } })
@@ -15,54 +16,20 @@ local BombLauncher = Component.new({ Tag = "BombLauncher", Extensions = { TroveA
 function BombLauncher:Construct()
 	self._radius = self.Instance:GetAttribute("Radius")
 	self._noob = self.Instance:FindFirstChild("Noob")
-	self._selectedEnemy = nil
+
+	self._tower = self:GetComponent(Tower)
 
 	self:SetupTimer()
 end
 
 function BombLauncher:SetupTimer()
 	self._trove:Add(Timer.Simple(UPDATE_INTERVAL, function()
-		self:TargetEnemy()
+		self._tower:TargetEnemy()
 	end))
 end
 
--- target the enemy that is the furthest along the path
-function BombLauncher:SelectEnemy()
-	local allEnemies = CollectionService:GetTagged("Enemy")
-
-	local selectedEnemy = nil
-	local selectedDistance = 0
-
-	for _, enemy: Model in allEnemies do
-		local distance = (enemy.PrimaryPart.Position - self.Instance.PrimaryPart.Position).Magnitude
-
-		if distance > self._radius then
-			continue
-		end
-
-		local progress = enemy:GetAttribute("ProgressAlongTrack") or 0
-
-		if progress > selectedDistance then
-			selectedEnemy = enemy
-			selectedDistance = progress
-		end
-	end
-
-	return selectedEnemy
-end
-
-function BombLauncher:TargetEnemy()
-	local selectedEnemy = self:SelectEnemy()
-
-	if not selectedEnemy then
-		return
-	end
-
-	self._selectedEnemy = selectedEnemy
-end
-
 function BombLauncher:PointTowardsEnemy()
-	local selectedEnemy = self._selectedEnemy
+	local selectedEnemy = self._tower.selectedEnemy
 	local primaryPart = self._noob.PrimaryPart
 
 	if not selectedEnemy then
