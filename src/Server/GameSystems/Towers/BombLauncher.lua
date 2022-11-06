@@ -40,7 +40,7 @@ function BombLauncher:Start()
 	end)
 end
 
-function BombLauncher:PointTowardsEnemy()
+function BombLauncher:GetEnemyPrimaryPart()
 	local selectedEnemy = self._tower.selectedEnemy
 	local primaryPart = self._noob.PrimaryPart
 
@@ -48,7 +48,13 @@ function BombLauncher:PointTowardsEnemy()
 		return
 	end
 
-	local enemyPrimaryPart = selectedEnemy.PrimaryPart
+	return selectedEnemy.PrimaryPart
+end
+
+function BombLauncher:PointTowardsEnemy()
+	local primaryPart = self._noob.PrimaryPart
+
+	local enemyPrimaryPart = self:GetEnemyPrimaryPart()
 
 	if not enemyPrimaryPart then
 		return
@@ -64,9 +70,15 @@ function BombLauncher:PointTowardsEnemy()
 end
 
 function BombLauncher:ThrowBomb()
+	local enemyPrimaryPart = self:GetEnemyPrimaryPart()
+
+	if not enemyPrimaryPart then
+		return
+	end
+
 	local newBomb = bomb:Clone()
 
-	local goalCFrame = self._tower.selectedEnemy.PrimaryPart.CFrame * BOMB_OFFSET
+	local goalCFrame = enemyPrimaryPart.CFrame * BOMB_OFFSET
 
 	newBomb.CFrame = self._noob.HumanoidRootPart.CFrame * CFrame.new(0, 0, -1)
 	newBomb:SetAttribute("End", goalCFrame)

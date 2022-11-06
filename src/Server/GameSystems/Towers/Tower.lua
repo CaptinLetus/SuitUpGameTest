@@ -18,7 +18,7 @@ function Tower:Construct()
 	self._fireRate = self.Instance:GetAttribute("FireRate")
 
 	self.selectedEnemy = nil
-	self._selectedAt = nil
+	self._lastShot = 0
 
 	self.Fire = Signal.new()
 
@@ -60,30 +60,25 @@ function Tower:SelectEnemy()
 end
 
 function Tower:CanFire()
+	if not self.selectedEnemy then
+		return false
+	end
+	
 	local now = os.clock()
 
-	if not self._selectedAt then
-		return
-	end
-
-	return now - self._selectedAt >= self._fireRate
+	return now - self._lastShot >= self._fireRate
 end
 
 function Tower:TargetEnemy()
 	local selectedEnemy = self:SelectEnemy()
 
 	if not selectedEnemy then
-		self._selectedAt = nil
 		return
-	end
-
-	if not self._selectedAt then
-		self._selectedAt = os.clock()
 	end
 
 	if self:CanFire() then
 		self.Fire:Fire()
-		self._selectedAt = os.clock() -- reset firerate timer
+		self._lastShot = os.clock()
 	end
 
 	self.selectedEnemy = selectedEnemy
