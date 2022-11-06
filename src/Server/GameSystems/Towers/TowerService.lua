@@ -15,12 +15,23 @@ local TowerService = Knit.CreateService({
 })
 
 function TowerService.Client:BuildTower(player: Player, towerName: string, base: BasePart)
+	local CurrencyService = Knit.GetService("CurrencyService")
+
 	local towerTemplate: Model = towers:FindFirstChild(towerName)
 
 	if not towerTemplate then
 		warn("Tower", towerName, "not found")
-		return false
+		return false, "ERROR"
 	end
+
+	local price = towerTemplate:GetAttribute("Price")
+
+	if not CurrencyService:CanAfford(player, price) then
+		warn("Player", player, "cannot afford", towerName)
+		return false, "NOT ENOUGH MONEY"
+	end
+
+	CurrencyService:Increment(player, -price)
 
 	local newTower = towerTemplate:Clone()
 
