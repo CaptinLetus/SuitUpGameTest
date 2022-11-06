@@ -83,6 +83,33 @@ function Walker:UpdateNode()
 	self:UpdateAttributes()
 end
 
+function Walker:TargetBomb(bomb)
+	local distance = (bomb.Instance.Position - self.Instance.PrimaryPart.Position).Magnitude
+
+	if distance > BOMB_PICKUP_DISTANCE then
+		return false
+	end
+
+	bomb:Target()
+
+	self._targetBomb = bomb
+	self._target = bomb.Instance
+
+	-- play voice line when reaching bomb
+	local curiousSound = self:GetRandomAudioFile(SoundService.VoiceLinesBacons.Curious)
+
+	curiousSound.PlayOnRemove = true
+	curiousSound.Parent = self.Instance.PrimaryPart
+	curiousSound:Destroy()
+
+	task.delay(2, function()
+		bomb:Explode()
+		self._humanoid.Health = 0
+	end)
+
+	return true
+end
+
 function Walker:CheckNearbyBombs()
 	if self._targetBomb then
 		return
@@ -91,28 +118,11 @@ function Walker:CheckNearbyBombs()
 	local bombs = Bomb:GetAll()
 
 	for _, bomb in bombs do
-		local distance = (bomb.Instance.Position - self.Instance.PrimaryPart.Position).Magnitude
+		local targeted = self:TargetBomb(bomb)
 
-		if distance > BOMB_PICKUP_DISTANCE then
-			continue
+		if targeted then
+			return
 		end
-
-		bomb:Target()
-
-		self._targetBomb = bomb
-		self._target = bomb.Instance
-
-		-- play voice line when reaching bomb
-		local curiousSound = self:GetRandomAudioFile(SoundService.VoiceLinesBacons.Curious)
-
-		curiousSound.PlayOnRemove = true
-		curiousSound.Parent = self.Instance.PrimaryPart
-		curiousSound:Destroy()
-		
-		task.delay(2, function ()
-			bomb:Explode()
-			self._humanoid.Health = 0
-		end)
 
 		break
 	end
