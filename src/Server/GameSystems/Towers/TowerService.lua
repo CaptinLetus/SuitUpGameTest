@@ -1,3 +1,7 @@
+--[[
+	This service is responsible for building new towers in the game
+]]
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Knit = require(ReplicatedStorage.Packages.Knit)
@@ -5,21 +9,10 @@ local Knit = require(ReplicatedStorage.Packages.Knit)
 local assets = ReplicatedStorage:FindFirstChild("Assets")
 local towers = assets:FindFirstChild("Towers")
 
-local TowerService = Knit.CreateService {
-	Name = "TowerService";
-	Client = {};
-}
-
-
-function TowerService:KnitStart()
-	
-end
-
-
-function TowerService:KnitInit()
-	
-end
-
+local TowerService = Knit.CreateService({
+	Name = "TowerService",
+	Client = {},
+})
 
 function TowerService.Client:BuildTower(player: Player, towerName: string, base: BasePart)
 	local towerTemplate: Model = towers:FindFirstChild(towerName)
@@ -36,6 +29,5 @@ function TowerService.Client:BuildTower(player: Player, towerName: string, base:
 
 	return true
 end
-
 
 return TowerService
