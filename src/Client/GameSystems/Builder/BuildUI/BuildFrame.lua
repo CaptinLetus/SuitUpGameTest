@@ -15,6 +15,7 @@ local function button(props)
 		TextColor3 = Color3.fromRGB(255, 255, 255),
 		TextScaled = true,
 		BorderSizePixel = 0,
+		[Roact.Event.Activated] = props.onClick,
 	}, {
 		Corner = Roact.createElement("UICorner", {
 			CornerRadius = UDim.new(0.1, 0),
@@ -54,6 +55,9 @@ function BuildFrame:render()
 			position = UDim2.fromScale(0.5, 0.5),
 			anchorPoint = Vector2.new(0.5, 0.5),
 			backgroundColor3 = Color3.fromRGB(153, 73, 218),
+			onClick = function()
+				self.props.viewModel:buildTower()
+			end,
 		}),
 	})
 end
