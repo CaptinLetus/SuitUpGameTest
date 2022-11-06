@@ -22,7 +22,7 @@ end
 
 function Walker:CreateBodyMovers()
 	local bodyVelocity = Instance.new("BodyVelocity")
-	bodyVelocity.MaxForce = Vector3.new(2000000, 0, 2000000)
+	bodyVelocity.MaxForce = Vector3.new(2000000, 2000000, 2000000)
 	bodyVelocity.Velocity = Vector3.new(0, 0, 0)
 	bodyVelocity.Parent = self.Instance.HumanoidRootPart
 
