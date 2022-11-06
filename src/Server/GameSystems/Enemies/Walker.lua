@@ -7,6 +7,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Component = require(ReplicatedStorage.Packages.Component)
 local TroveAdder = require(ReplicatedStorage.ComponentExtensions.TroveAdder)
 
+local SMALL_ANGLE = 0.1
+
 local nodes = workspace:WaitForChild("Nodes")
 
 local Walker = Component.new({ Tag = "Walker", Extensions = { TroveAdder } })
@@ -77,7 +79,7 @@ function Walker:UpdateNode()
 
 	local angle = math.acos(nodeDirection:Dot(currentDirection))
 
-	if angle < 0.1 then
+	if angle < SMALL_ANGLE then
 		return
 	end
 
