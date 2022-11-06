@@ -25,8 +25,8 @@ end
 function InterfaceController:KnitStart()
 	local player = Knit.Player
 
-	player:GetAttributeChangedSignal("Currency"):Connect(function()
-		viewModel:setCurrency(player:GetAttribute("Currency") or 0)
+	Knit.GetService("CurrencyService").Currency:Observe(function (amount)
+		viewModel:setCurrency(amount)
 	end)
 
 	player:GetAttributeChangedSignal("Lives"):Connect(function()
