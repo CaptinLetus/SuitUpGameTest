@@ -11,13 +11,12 @@ local TroveAdder = require(ReplicatedStorage.ComponentExtensions.TroveAdder)
 
 local MIN_PROGRESS = 1
 
-local Tower = Component.new({ Tag = "Tower", Extensions = {TroveAdder} })
+local Tower = Component.new({ Tag = "Tower", Extensions = { TroveAdder } })
 
 function Tower:Construct()
 	self._radius = self.Instance:GetAttribute("Radius")
 	self._fireRate = self.Instance:GetAttribute("FireRate")
 
-	
 	self.selectedEnemy = nil
 	self._selectedAt = nil
 
@@ -33,6 +32,12 @@ function Tower:SelectEnemy()
 	local selectedDistance = 0
 
 	for _, enemy: Model in allEnemies do
+		local humanoid = enemy:FindFirstChild("Humanoid")
+
+		if humanoid.Health <= 0 then
+			continue
+		end
+
 		local distance = (enemy.PrimaryPart.Position - self.Instance.PrimaryPart.Position).Magnitude
 
 		if distance > self._radius then

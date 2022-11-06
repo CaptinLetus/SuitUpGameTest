@@ -7,7 +7,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Component = require(ReplicatedStorage.Packages.Component)
 local TroveAdder = require(ReplicatedStorage.ComponentExtensions.TroveAdder)
 
-local SMALL_ANGLE = 0.1
+local HIP_HEIGHT = 1.8
 
 local nodes = workspace:WaitForChild("Nodes")
 
@@ -17,14 +17,10 @@ function Walker:Construct()
 	self._previousNode = 0
 	self._nextNode = 1
 
-	self._t = 0
-	self._startAt = 0
-
 	self._humanoid = self.Instance:WaitForChild("Humanoid")
+	self._humanoid.HipHeight = HIP_HEIGHT -- for some reason, setting this in studio doesn't work
 
 	self:UpdateAttributes()
-
-	self:CreateBodyMovers()
 end
 
 function Walker:UpdateAttributes()
@@ -32,27 +28,16 @@ function Walker:UpdateAttributes()
 	self.Instance:SetAttribute("NextNode", self._nextNode)
 end
 
-function Walker:CreateBodyMovers()
-	local bodyVelocity = Instance.new("BodyVelocity")
-	bodyVelocity.MaxForce = Vector3.new(2000000, 2000000, 2000000)
-	bodyVelocity.Velocity = Vector3.new(0, 0, 0)
-	bodyVelocity.Parent = self.Instance.HumanoidRootPart
-
-	local bodyGyro = Instance.new("BodyGyro")
-	bodyGyro.MaxTorque = Vector3.new(2000000, 2000000, 2000000)
-	bodyGyro.CFrame = self.Instance.HumanoidRootPart.CFrame
-	bodyGyro.Parent = self.Instance.HumanoidRootPart
-
-	self._bodyVelocity = bodyVelocity
-	self._bodyGyro = bodyGyro
-
-	self._trove:Add(bodyVelocity)
-	self._trove:Add(bodyGyro)
-end
-
 function Walker:Start()
-	task.wait(1) -- gives the physics for the character a chance to initialize
-	self:Move()
+	self._humanoid.MoveToFinished:Connect(function(reached)
+		if not reached then
+			warn("There was an issue")
+			self.Instance:Destroy()
+			return
+		end
+
+		self:UpdateNode()
+	end)
 end
 
 function Walker:UpdateNode()
@@ -60,64 +45,28 @@ function Walker:UpdateNode()
 	self._nextNode += 1
 
 	self:UpdateAttributes()
+end
 
+function Walker:HeartbeatUpdate()
 	local nextNode: BasePart = nodes:FindFirstChild(self._nextNode)
 	local previousNode: BasePart = nodes:FindFirstChild(self._previousNode)
 
 	if not nextNode then
-		return
-	end
-
-	local rootCFrame = self.Instance.HumanoidRootPart.CFrame
-
-	self._bodyGyro.CFrame = CFrame.lookAt(rootCFrame.Position, nextNode.Position)
-
-	-- stop and rotate to face next node
-	-- dont play rotation animation if there is hardly any rotation
-	local nodeDirection = CFrame.lookAt(previousNode.Position, nextNode.Position).LookVector
-	local currentDirection = rootCFrame.LookVector
-
-	local angle = math.acos(nodeDirection:Dot(currentDirection))
-
-	if angle < SMALL_ANGLE then
-		return
-	end
-
-	self._bodyVelocity.Velocity = Vector3.new(0, 0, 0)
-
-	task.wait(1)
-end
-
-function Walker:Move()
-	local nextNode: BasePart = nodes:FindFirstChild(self._nextNode)
-
-	if not nextNode then
 		self.Instance:Destroy()
-		warn("DEAL DAMAGE")
+		warn("DO DAMAGE")
 		return
 	end
 
-	local rootPosition = self.Instance.HumanoidRootPart.Position
-	local distance = (rootPosition - nextNode.Position).Magnitude
+	local currentPosition = self.Instance.PrimaryPart.Position
 
-	local t = distance / self._humanoid.WalkSpeed
+	local totalDistanceBetweenNodes = (nextNode.Position - previousNode.Position).Magnitude
+	local distanceToNext = (nextNode.Position - currentPosition).Magnitude
 
-	self._bodyVelocity.Velocity = (nextNode.Position - rootPosition) / t
+	local percent = distanceToNext / totalDistanceBetweenNodes
 
-	self._t = t
-	self._startAt = os.clock()
+	self.Instance:SetAttribute("ProgressAlongTrack", self._previousNode + percent)
 
-	task.delay(t, function()
-		self:UpdateNode()
-		self:Move()
-	end)
-end
-
-function Walker:HeartbeatUpdate()
-	local now = os.clock()
-	local percentToTextNode = (now - self._startAt) / self._t
-
-	self.Instance:SetAttribute("ProgressAlongTrack", self._previousNode + percentToTextNode)
+	self._humanoid:MoveTo(nextNode.Position)
 end
 
 return Walker

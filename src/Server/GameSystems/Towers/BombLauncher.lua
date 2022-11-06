@@ -48,7 +48,13 @@ function BombLauncher:PointTowardsEnemy()
 		return
 	end
 
-	local lookAtCF = CFrame.lookAt(primaryPart.Position, selectedEnemy.PrimaryPart.Position)
+	local enemyPrimaryPart = selectedEnemy.PrimaryPart
+
+	if not enemyPrimaryPart then
+		return
+	end
+
+	local lookAtCF = CFrame.lookAt(primaryPart.Position, enemyPrimaryPart.Position)
 
 	-- make sure we only rotate around the y axis
 	local _, y = lookAtCF:ToEulerAnglesYXZ()
