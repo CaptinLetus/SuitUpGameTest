@@ -1,3 +1,7 @@
+--[[
+	This component manages the bomb launcher tower
+]]
+
 local CollectionService = game:GetService("CollectionService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
