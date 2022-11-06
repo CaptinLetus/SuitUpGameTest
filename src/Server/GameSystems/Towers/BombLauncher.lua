@@ -28,6 +28,12 @@ function BombLauncher:SetupTimer()
 	end))
 end
 
+function BombLauncher:Start()
+	self._tower.Fire:Connect(function()
+		self:ThrowBomb()
+	end)
+end
+
 function BombLauncher:PointTowardsEnemy()
 	local selectedEnemy = self._tower.selectedEnemy
 	local primaryPart = self._noob.PrimaryPart
@@ -45,8 +51,16 @@ function BombLauncher:PointTowardsEnemy()
 	primaryPart.CFrame = uprightCFrame
 end
 
+function BombLauncher:ThrowBomb()
+	print("throw")
+end
+
 function BombLauncher:SteppedUpdate()
 	self:PointTowardsEnemy()
+
+	if self._tower.selectedEnemy then
+		
+	end
 end
 
 return BombLauncher
