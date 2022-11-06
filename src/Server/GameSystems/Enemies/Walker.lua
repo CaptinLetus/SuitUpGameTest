@@ -168,9 +168,8 @@ function Walker:HeartbeatUpdate()
 	self:UpdateProgressAttribute()
 	self:CheckNearbyBombs()
 
-	self._humanoid.HipHeight = HIP_HEIGHT -- for some reason, this randomly gets set to -1
 
-	self._humanoid:MoveTo(self._target.Position)
+	self._humanoid.WalkToPoint = self._target.Position
 end
 
 function Walker:GetRandomAudioFile(parent: Folder): Sound
