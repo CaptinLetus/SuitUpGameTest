@@ -10,9 +10,12 @@ local ChatService = game:GetService("Chat")
 local Component = require(ReplicatedStorage.Packages.Component)
 local TroveAdder = require(ReplicatedStorage.ComponentExtensions.TroveAdder)
 local Bomb = require(ServerScriptService.GameSystems.Weapons.Bomb)
+local Timer = require(ReplicatedStorage.Packages.Timer)
 
 local HIP_HEIGHT = 1.8
 local BOMB_PICKUP_DISTANCE = 5
+local CHANCE_TO_PICK_UP_BOMB = 0.3
+local BOMB_CHANCE_UPDATE_RATE = 5
 local CURIOUS_CHATS = {
 	"🙃",
 	"😎",
@@ -34,9 +37,9 @@ function Walker:Construct()
 
 	self._target = workspace.Nodes["1"]
 	self._targetBomb = false
+	self._willPickup = false
 
 	self._humanoid = self.Instance:WaitForChild("Humanoid")
-	self._humanoid.HipHeight = HIP_HEIGHT -- for some reason, setting this in studio doesn't work
 
 	self:UpdateAttributes()
 end
@@ -62,14 +65,22 @@ end
 
 function Walker:Start()
 	self._humanoid.MoveToFinished:Connect(function(reached)
-		if not reached then
-			warn("There was an issue")
-			self.Instance:Destroy()
-			return
-		end
-
-		self:UpdateNode()
+		self:MoveToFinished(reached)
 	end)
+
+	self._trove:Add(Timer.Simple(BOMB_CHANCE_UPDATE_RATE, function()
+		self:UpdateBombChance()
+	end))
+end
+
+function Walker:MoveToFinished(reached)
+	if not reached then
+		warn("There was an issue")
+		self.Instance:Destroy()
+		return
+	end
+
+	self:UpdateNode()
 end
 
 function Walker:UpdateNode()
@@ -123,11 +134,19 @@ function Walker:TargetBomb(bomb)
 	return true
 end
 
+function Walker:UpdateBombChance()
+	self._willPickup = random:NextNumber() > CHANCE_TO_PICK_UP_BOMB 
+end
+
 function Walker:CheckNearbyBombs()
 	if self._targetBomb then
 		return
 	end
 
+	if not self._willPickup then
+		return
+	end
+	
 	local bombs = Bomb:GetAll()
 
 	for _, bomb in bombs do
@@ -148,6 +167,8 @@ function Walker:HeartbeatUpdate()
 
 	self:UpdateProgressAttribute()
 	self:CheckNearbyBombs()
+
+	self._humanoid.HipHeight = HIP_HEIGHT -- for some reason, this randomly gets set to -1
 
 	self._humanoid:MoveTo(self._target.Position)
 end
