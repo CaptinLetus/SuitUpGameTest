@@ -1,9 +1,12 @@
+local CollectionService = game:GetService("CollectionService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Component = require(ReplicatedStorage.Packages.Component)
 local getCurveVelocity = require(ReplicatedStorage.Utils.getCurveVelocity)
 
 local EXPLODE_TIME = 2
+local DAMAGE = 50
+local RADIUS = 15
 
 local Bomb = Component.new({ Tag = "Bomb", Extensions = {} })
 
@@ -17,8 +20,40 @@ function Bomb:Start()
 	end)
 end
 
+function Bomb:DamageEnemies()
+	local allEnemies = CollectionService:GetTagged("Enemy")
+
+	for _, enemy: Model in allEnemies do
+		local distance = (enemy.PrimaryPart.Position - self.Instance.Position).Magnitude
+
+		if distance > RADIUS then
+			continue
+		end
+
+		local humanoid = enemy:FindFirstChildWhichIsA("Humanoid")
+
+		if not humanoid then
+			continue
+		end
+
+		print("hit")
+		humanoid:TakeDamage(DAMAGE)
+	end
+end
+
 function Bomb:Explode()
+	local explosion = Instance.new("Explosion")
+	explosion.BlastPressure = 0
+	explosion.BlastRadius = 0
+	explosion.Position = self.Instance.Position
+	explosion.Parent = workspace
+
 	self.Instance:Destroy()
+
+	self:DamageEnemies()
+
+	task.wait(1)
+	explosion:Destroy()
 end
 
 return Bomb
