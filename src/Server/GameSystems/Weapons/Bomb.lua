@@ -1,8 +1,9 @@
-local CollectionService = game:GetService("CollectionService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerScriptService = game:GetService("ServerScriptService")
 
 local Component = require(ReplicatedStorage.Packages.Component)
 local getCurveVelocity = require(ReplicatedStorage.Utils.getCurveVelocity)
+local Enemy = require(ServerScriptService.GameSystems.Enemies.Enemy)
 
 local EXPLODE_TIME = 2
 local DAMAGE = 20
@@ -29,9 +30,9 @@ function Bomb:Start()
 end
 
 function Bomb:DamageEnemies()
-	local allEnemies = CollectionService:GetTagged("Enemy")
+	for _, enemyComp in Enemy:GetAll() do
+		local enemy = enemyComp.Instance
 
-	for _, enemy: Model in allEnemies do
 		local distance = (enemy.PrimaryPart.Position - self.Instance.Position).Magnitude
 
 		if distance > RADIUS then
