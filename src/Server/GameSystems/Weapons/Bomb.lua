@@ -5,7 +5,7 @@ local Component = require(ReplicatedStorage.Packages.Component)
 local getCurveVelocity = require(ReplicatedStorage.Utils.getCurveVelocity)
 
 local EXPLODE_TIME = 2
-local DAMAGE = 50
+local DAMAGE = 20
 local RADIUS = 15
 
 local Bomb = Component.new({ Tag = "Bomb", Extensions = {} })
