@@ -5,6 +5,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 local SoundService = game:GetService("SoundService")
+local ChatService = game:GetService("Chat")
 
 local Component = require(ReplicatedStorage.Packages.Component)
 local TroveAdder = require(ReplicatedStorage.ComponentExtensions.TroveAdder)
@@ -12,6 +13,15 @@ local Bomb = require(ServerScriptService.GameSystems.Weapons.Bomb)
 
 local HIP_HEIGHT = 1.8
 local BOMB_PICKUP_DISTANCE = 5
+local CURIOUS_CHATS = {
+	"🙃",
+	"😎",
+	"🙂",
+	"lord bacon will approve",
+	"oooh shiny",
+	"oh look, a gift!",
+	"for me?  thanks!",
+}
 
 local nodes = workspace:WaitForChild("Nodes")
 local random = Random.new()
@@ -101,6 +111,9 @@ function Walker:TargetBomb(bomb)
 	curiousSound.PlayOnRemove = true
 	curiousSound.Parent = self.Instance.PrimaryPart
 	curiousSound:Destroy()
+
+	local chat = CURIOUS_CHATS[random:NextInteger(1, #CURIOUS_CHATS)]
+	ChatService:Chat(self.Instance.Head, chat, Enum.ChatColor.Blue)
 
 	task.delay(2, function()
 		bomb:Explode()
