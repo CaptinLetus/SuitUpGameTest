@@ -11,6 +11,12 @@ local TroveAdder = require(ReplicatedStorage.ComponentExtensions.TroveAdder)
 local Tower = require(script.Parent.Tower)
 
 local UPDATE_INTERVAL = 0.2
+local BOMB_OFFSET = CFrame.new(0, 0, -5) -- shot a bomb a bit in front of the enemy
+
+local assets = ReplicatedStorage:FindFirstChild("Assets")
+local weapons = assets:FindFirstChild("Weapons")
+local bomb = weapons:FindFirstChild("Bomb")
+
 local BombLauncher = Component.new({ Tag = "BombLauncher", Extensions = { TroveAdder } })
 
 function BombLauncher:Construct()
@@ -52,15 +58,19 @@ function BombLauncher:PointTowardsEnemy()
 end
 
 function BombLauncher:ThrowBomb()
-	print("throw")
+	local newBomb = bomb:Clone()
+
+	local goalCFrame = self._tower.selectedEnemy.PrimaryPart.CFrame * BOMB_OFFSET
+
+	newBomb.CFrame = self._noob.HumanoidRootPart.CFrame * CFrame.new(0, 0, -1)
+	newBomb:SetAttribute("End", goalCFrame)
+	newBomb.Parent = workspace
+
+	self._trove:Add(newBomb)
 end
 
 function BombLauncher:SteppedUpdate()
 	self:PointTowardsEnemy()
-
-	if self._tower.selectedEnemy then
-		
-	end
 end
 
 return BombLauncher
