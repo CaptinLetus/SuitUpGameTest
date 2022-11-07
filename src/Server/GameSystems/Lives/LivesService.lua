@@ -1,11 +1,10 @@
 local CollectionService = game:GetService("CollectionService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local ServerScriptService = game:GetService("ServerScriptService")
 
 local Knit = require(ReplicatedStorage.Packages.Knit)
 
-local START_LIVES = 1
+local START_LIVES = 5
 
 local LivesService = Knit.CreateService({
 	Name = "LivesService",
