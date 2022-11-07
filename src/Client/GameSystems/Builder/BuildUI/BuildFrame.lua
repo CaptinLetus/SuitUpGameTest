@@ -25,14 +25,14 @@ end
 
 function BuildFrame:init()
 	self:setState({
-		value = self.props.viewModel.value,
+		errorMsg = self.props.viewModel.errorMsg,
 	})
 end
 
 function BuildFrame:didMount()
 	self.props.viewModel.updated:Connect(function(viewModel)
 		self:setState({
-			value = viewModel.value,
+			errorMsg = viewModel.errorMsg or Roact.None,
 		})
 	end)
 end
@@ -50,7 +50,7 @@ function BuildFrame:render()
 			Color = Color3.fromRGB(255, 255, 255),
 		}),
 		Spawn = Roact.createElement(button, {
-			text = "Spawn",
+			text = self.state.errorMsg or "Build",
 			size = UDim2.fromScale(0.8, 0.7),
 			position = UDim2.fromScale(0.5, 0.5),
 			anchorPoint = Vector2.new(0.5, 0.5),

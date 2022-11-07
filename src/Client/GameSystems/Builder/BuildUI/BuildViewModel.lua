@@ -13,6 +13,8 @@ function BuildViewModel.new(): table
 	local self = ViewModel.new()
 
 	self.base = nil
+	self.errorMsg = nil
+	self._errorTime = 0
 
 	return setmetatable(self, BuildViewModel)
 end
@@ -22,24 +24,40 @@ function BuildViewModel:setBase(newBase: any)
 	self:update()
 end
 
+function BuildViewModel:createErrorMsg(err)
+	self.errorMsg = err
+
+	local t = os.clock()
+	self._errorTime = t
+
+	task.delay(1, function()
+		if self._errorTime == t then
+			self.errorMsg = nil
+			self:update()
+		end
+	end)
+
+	self:update()
+end
+
 function BuildViewModel:buildTower()
 	if not self.base then
 		return
 	end
 
-	if Knit then
-		local success, didBuild = Knit.GetService("TowerService"):BuildTower("BombLauncher", self.base):await()
-
-		if not success or not didBuild then
-			warn("Failed to build tower:", didBuild)
-		end
-	else -- for hoarse testing
+	if not Knit then -- for hoarse testing
 		warn("Build tower")
+		return
 	end
 
-	-- remove UI after building
-	self.base = nil
-	self:update()
+	local success, didBuild, err = Knit.GetService("TowerService"):BuildTower("BombLauncher", self.base):await()
+
+	if success and didBuild then
+		self.base = nil
+		self:update()
+	else
+		self:createErrorMsg(err)
+	end
 end
 
 function BuildViewModel:Destroy()
