@@ -19,7 +19,7 @@ function Enemy:Start()
 
 		Knit.GetService("CurrencyService"):Increment(player, COINS_PER_KILL)
 
-		task.wait(1)
+		task.wait(3)
 		self.Instance:Destroy()
 	end)
 end
