@@ -49,4 +49,10 @@ function LivesService:IsAlive()
 	return self.Client.Lives:Get() > 0
 end
 
+function LivesService:ResetGame()
+	self.Client.Lives:Set(START_LIVES)
+	
+	local player = Players:GetPlayers()[1]
+	Knit.Services.CurrencyService:Reset(player)
+end
 return LivesService
