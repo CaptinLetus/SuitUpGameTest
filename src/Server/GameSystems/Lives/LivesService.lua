@@ -14,7 +14,7 @@ local LivesService = Knit.CreateService({
 	},
 })
 
-function LivesService:Lost()
+function LivesService:ClearMap()
 	for _, tower in pairs(CollectionService:GetTagged("Tower")) do
 		if not tower:IsDescendantOf(workspace) then
 			continue
@@ -38,11 +38,6 @@ function LivesService:RemoveLive()
 	local newAmount = current - 1
 
 	self.Client.Lives:Set(newAmount)
-
-	if newAmount <= 0 then
-		self:Lost()
-		return
-	end
 end
 
 function LivesService:IsAlive()
@@ -51,8 +46,10 @@ end
 
 function LivesService:ResetGame()
 	self.Client.Lives:Set(START_LIVES)
-	
+
 	local player = Players:GetPlayers()[1]
 	Knit.Services.CurrencyService:Reset(player)
+
+	self:ClearMap()
 end
 return LivesService
