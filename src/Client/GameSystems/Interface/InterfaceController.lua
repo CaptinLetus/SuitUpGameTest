@@ -23,14 +23,12 @@ function InterfaceController:KnitInit()
 end
 
 function InterfaceController:KnitStart()
-	local player = Knit.Player
-
-	Knit.GetService("CurrencyService").Currency:Observe(function (amount)
+	Knit.GetService("CurrencyService").Currency:Observe(function(amount)
 		viewModel:setCurrency(amount)
 	end)
 
-	player:GetAttributeChangedSignal("Lives"):Connect(function()
-		viewModel:setLives(player:GetAttribute("Lives") or 0)
+	Knit.GetService("LivesService").Lives:Observe(function(amount)
+		viewModel:setLives(amount)
 	end)
 end
 

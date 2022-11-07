@@ -24,4 +24,8 @@ function CurrencyService:CanAfford(player: Player, amount: number): boolean
 	return currentAmount >= amount
 end
 
+function CurrencyService:Reset(player: Player)
+	self.Client.Currency:SetFor(player, START_AMOUNT)
+end
+
 return CurrencyService

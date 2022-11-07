@@ -7,6 +7,7 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local SoundService = game:GetService("SoundService")
 local ChatService = game:GetService("Chat")
 
+local Knit = require(ReplicatedStorage.Packages.Knit)
 local Component = require(ReplicatedStorage.Packages.Component)
 local TroveAdder = require(ReplicatedStorage.ComponentExtensions.TroveAdder)
 local Bomb = require(ServerScriptService.GameSystems.Weapons.Bomb)
@@ -95,7 +96,7 @@ function Walker:UpdateNode()
 
 	if not nextNode then
 		self.Instance:Destroy()
-		warn("DO DAMAGE")
+		Knit.GetService("LivesService"):RemoveLive()
 		return
 	end
 
