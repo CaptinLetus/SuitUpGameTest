@@ -46,7 +46,7 @@ function LivesService:IsAlive()
 	return self.Client.Lives:Get() > 0
 end
 
-function LivesService:ResetGame()
+function LivesService.Client:ResetGame()
 	self.Client.Lives:Set(START_LIVES)
 
 	local player = Players:GetPlayers()[1]
