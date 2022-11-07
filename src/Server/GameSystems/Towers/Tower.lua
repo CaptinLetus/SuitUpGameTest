@@ -63,7 +63,7 @@ function Tower:CanFire()
 	if not self.selectedEnemy then
 		return false
 	end
-	
+
 	local now = os.clock()
 
 	return now - self._lastShot >= self._fireRate
@@ -71,6 +71,8 @@ end
 
 function Tower:TargetEnemy()
 	local selectedEnemy = self:SelectEnemy()
+
+	self.selectedEnemy = selectedEnemy
 
 	if not selectedEnemy then
 		return
@@ -80,8 +82,6 @@ function Tower:TargetEnemy()
 		self.Fire:Fire()
 		self._lastShot = os.clock()
 	end
-
-	self.selectedEnemy = selectedEnemy
 end
 
 return Tower
