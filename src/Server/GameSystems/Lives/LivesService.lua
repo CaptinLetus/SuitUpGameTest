@@ -45,4 +45,8 @@ function LivesService:RemoveLive()
 	end
 end
 
+function LivesService:IsAlive()
+	return self.Client.Lives:Get() > 0
+end
+
 return LivesService
