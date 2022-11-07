@@ -1,5 +1,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
 
+local Knit = RunService:IsRunning() and require(ReplicatedStorage.Packages.Knit)
 local ViewModel = require(ReplicatedStorage.RoactComponents.ViewModel)
 
 local InterfaceViewModel = {}
@@ -24,6 +26,16 @@ end
 function InterfaceViewModel:setLives(newLives: number)
 	self.lives = newLives
 	self:update()
+end
+
+function InterfaceViewModel:restart()
+	if not Knit then
+		self.lives = 3
+		self:update()
+		return
+	end
+
+	Knit.GetService("LivesService"):ResetGame()
 end
 
 function InterfaceViewModel:Destroy()

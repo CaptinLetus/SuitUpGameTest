@@ -2,6 +2,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Roact = require(ReplicatedStorage.Packages.Roact)
 local Panel = require(script.Panel)
+local Lives = require(script.Lives)
 
 local InterfaceFrame = Roact.Component:extend("InterfaceFrame")
 
@@ -53,6 +54,10 @@ function InterfaceFrame:render()
 				HorizontalAlignment = Enum.HorizontalAlignment.Right,
 				Padding = UDim.new(0.1, 0),
 			}),
+		}),
+		Lives = Roact.createElement(Lives, {
+			lives = self.state.lives,
+			viewModel = self.props.viewModel,
 		}),
 	})
 end

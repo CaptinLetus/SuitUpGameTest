@@ -7,7 +7,7 @@ return function(target)
 	local viewModel = InterfaceViewModel.new()
 
 	viewModel:setCurrency(100)
-	viewModel:setLives(3)
+	viewModel:setLives(0)
 	
 	local element = Roact.createElement(require(script.Parent.InterfaceFrame), {
 		viewModel = viewModel

@@ -37,6 +37,8 @@ function LivesService:RemoveLive()
 
 	local newAmount = current - 1
 
+	newAmount = math.max(newAmount, 0)
+
 	self.Client.Lives:Set(newAmount)
 end
 
