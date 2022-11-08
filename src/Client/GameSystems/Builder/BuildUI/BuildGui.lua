@@ -23,7 +23,7 @@ function BuildGui:render()
 	return Roact.createElement("BillboardGui", {
 		ResetOnSpawn = false,
 		Active = true,
-		Size = UDim2.fromOffset(200, 80),
+		Size = UDim2.new(0, 200, 100, 0),
 		ExtentsOffset = Vector3.new(2, 0, 0),
 		AlwaysOnTop = true,
 		Adornee = self.state.base,

@@ -40,7 +40,7 @@ function BuildViewModel:createErrorMsg(err)
 	self:update()
 end
 
-function BuildViewModel:buildTower()
+function BuildViewModel:buildTower(tower)
 	if not self.base then
 		return
 	end
@@ -50,7 +50,7 @@ function BuildViewModel:buildTower()
 		return
 	end
 
-	local success, didBuild, err = Knit.GetService("TowerService"):BuildTower("GunTower", self.base):await()
+	local success, didBuild, err = Knit.GetService("TowerService"):BuildTower(tower.Name, self.base):await()
 
 	if success and didBuild then
 		self.base = nil

@@ -2,8 +2,12 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Roact = require(ReplicatedStorage.Packages.Roact)
 
-local BuildFrame = Roact.Component:extend("BuildFrame")
+local towers = ReplicatedStorage:WaitForChild("Assets"):WaitForChild("Towers")
 
+local BUTTON_HEIGHT = 50
+local PADDING = 10
+
+local BuildFrame = Roact.Component:extend("BuildFrame")
 
 local function button(props)
 	return Roact.createElement("TextButton", {
@@ -15,6 +19,7 @@ local function button(props)
 		TextColor3 = Color3.fromRGB(255, 255, 255),
 		TextScaled = true,
 		BorderSizePixel = 0,
+		LayoutOrder = props.layoutOrder,
 		[Roact.Event.Activated] = props.onClick,
 	}, {
 		Corner = Roact.createElement("UICorner", {
@@ -37,9 +42,41 @@ function BuildFrame:didMount()
 	end)
 end
 
+function BuildFrame:getTowerButtons()
+	local buttons = {}
+
+	for _, tower in towers:GetChildren() do
+		local towerName = tower:GetAttribute("GameName")
+		local price = tower:GetAttribute("Price")
+
+		table.insert(
+			buttons,
+			Roact.createElement(button, {
+				text = self.state.errorMsg or towerName .. " - " .. price,
+				size = UDim2.new(1, -PADDING * 2, 0, BUTTON_HEIGHT),
+				position = UDim2.fromScale(0.5, 0.5),
+				anchorPoint = Vector2.new(0.5, 0.5),
+				backgroundColor3 = Color3.fromRGB(153, 73, 218),
+				onClick = function()
+					self.props.viewModel:buildTower(tower)
+				end,
+				layoutOrder = price
+			})
+		)
+	end
+
+	return buttons
+end
+
 function BuildFrame:render()
+	local buttons = self:getTowerButtons()
+	local totalPaddingBetweenButtons = PADDING * (#buttons - 1)
+	local totalPadding = PADDING * 2 + totalPaddingBetweenButtons
+
 	return Roact.createElement("Frame", {
-		Size = UDim2.fromScale(1, 1),
+		Size = UDim2.new(1, 0, 0, #buttons * BUTTON_HEIGHT + totalPadding),
+		Position = UDim2.fromScale(0.5, 0.5),
+		AnchorPoint = Vector2.new(0.5, 0.5),
 		BackgroundColor3 = Color3.fromRGB(72, 2, 129),
 	}, {
 		Corner = Roact.createElement("UICorner", {
@@ -49,16 +86,14 @@ function BuildFrame:render()
 			Thickness = 2,
 			Color = Color3.fromRGB(255, 255, 255),
 		}),
-		Spawn = Roact.createElement(button, {
-			text = self.state.errorMsg or "Build",
-			size = UDim2.fromScale(0.8, 0.7),
-			position = UDim2.fromScale(0.5, 0.5),
-			anchorPoint = Vector2.new(0.5, 0.5),
-			backgroundColor3 = Color3.fromRGB(153, 73, 218),
-			onClick = function()
-				self.props.viewModel:buildTower()
-			end,
+		List = Roact.createElement("UIListLayout", {
+			FillDirection = Enum.FillDirection.Vertical,
+			HorizontalAlignment = Enum.HorizontalAlignment.Center,
+			VerticalAlignment = Enum.VerticalAlignment.Center,
+			SortOrder = Enum.SortOrder.LayoutOrder,
+			Padding = UDim.new(0, PADDING),
 		}),
+		Buttons = Roact.createFragment(buttons),
 	})
 end
 
