@@ -8,8 +8,10 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Component = require(ReplicatedStorage.Packages.Component)
 local Signal = require(ReplicatedStorage.Packages.Signal)
 local TroveAdder = require(ReplicatedStorage.ComponentExtensions.TroveAdder)
+local Timer = require(ReplicatedStorage.Packages.Timer)
 
 local MIN_PROGRESS = 1
+local UPDATE_INTERVAL = 0.2
 
 local Tower = Component.new({ Tag = "Tower", Extensions = { TroveAdder } })
 
@@ -21,8 +23,25 @@ function Tower:Construct()
 	self._lastShot = 0
 
 	self.Fire = Signal.new()
-
 	self._trove:Add(self.Fire)
+	
+	self:SetupTimer()
+end
+
+function Tower:SetupTimer()
+	self._trove:Add(Timer.Simple(UPDATE_INTERVAL, function()
+		self:TargetEnemy()
+	end))
+end
+
+function Tower:GetEnemyPrimaryPart()
+	local selectedEnemy = self.selectedEnemy
+
+	if not selectedEnemy then
+		return
+	end
+
+	return selectedEnemy.PrimaryPart
 end
 
 function Tower:SelectEnemy()

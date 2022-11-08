@@ -2,15 +2,12 @@
 	This component manages the bomb launcher tower
 ]]
 
-local CollectionService = game:GetService("CollectionService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Component = require(ReplicatedStorage.Packages.Component)
-local Timer = require(ReplicatedStorage.Packages.Timer)
 local TroveAdder = require(ReplicatedStorage.ComponentExtensions.TroveAdder)
 local Tower = require(script.Parent.Tower)
 
-local UPDATE_INTERVAL = 0.2
 local BOMB_OFFSET = CFrame.new(0, 0, -5) -- shot a bomb a bit in front of the enemy
 
 local assets = ReplicatedStorage:FindFirstChild("Assets")
@@ -22,39 +19,19 @@ local BombLauncher = Component.new({ Tag = "BombLauncher", Extensions = { TroveA
 function BombLauncher:Construct()
 	self._radius = self.Instance:GetAttribute("Radius")
 	self._noob = self.Instance:FindFirstChild("Noob")
-
-	self._tower = self:GetComponent(Tower)
-
-	self:SetupTimer()
-end
-
-function BombLauncher:SetupTimer()
-	self._trove:Add(Timer.Simple(UPDATE_INTERVAL, function()
-		self._tower:TargetEnemy()
-	end))
 end
 
 function BombLauncher:Start()
+	self._tower = self:GetComponent(Tower)
+
 	self._tower.Fire:Connect(function()
 		self:ThrowBomb()
 	end)
 end
 
-function BombLauncher:GetEnemyPrimaryPart()
-	local selectedEnemy = self._tower.selectedEnemy
-	local primaryPart = self._noob.PrimaryPart
-
-	if not selectedEnemy then
-		return
-	end
-
-	return selectedEnemy.PrimaryPart
-end
-
 function BombLauncher:PointTowardsEnemy()
 	local primaryPart = self._noob.PrimaryPart
-
-	local enemyPrimaryPart = self:GetEnemyPrimaryPart()
+	local enemyPrimaryPart = self._tower:GetEnemyPrimaryPart()
 
 	if not enemyPrimaryPart then
 		return
@@ -70,7 +47,7 @@ function BombLauncher:PointTowardsEnemy()
 end
 
 function BombLauncher:ThrowBomb()
-	local enemyPrimaryPart = self:GetEnemyPrimaryPart()
+	local enemyPrimaryPart = self._tower:GetEnemyPrimaryPart()
 
 	if not enemyPrimaryPart then
 		return
