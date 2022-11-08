@@ -2,6 +2,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Knit = require(ReplicatedStorage.Packages.Knit)
 
+local currentLevel = require(ReplicatedStorage.Data.Levels.FirstLevel)
+
 local EnemyService = Knit.CreateService {
 	Name = "EnemyService";
 	Client = {};
@@ -9,24 +11,56 @@ local EnemyService = Knit.CreateService {
 
 
 function EnemyService:KnitStart()
-	task.spawn(function ()
-		while task.wait(5) do
-			if not Knit.GetService("LivesService"):IsAlive() then
-				continue
+	-- task.spawn(function ()
+	-- 	while task.wait(5) do
+	-- 		if not Knit.GetService("LivesService"):IsAlive() then
+	-- 			continue
+	-- 		end
+
+	-- 		self:SpawnEnemy()
+	-- 	end
+	-- end)
+
+	self:RunLevel()
+end
+
+
+function EnemyService:RunLevel()
+	for i, wave in ipairs(currentLevel) do
+		print("wave", i)
+		local enemies = wave.enemies
+		local length = wave.length
+		local loop = wave.loop or 1
+
+
+		print("enemies", enemies)
+		print("length", length)
+		print("loop", loop)
+
+		for _ = 1, loop do
+			for _, enemy in ipairs(enemies) do
+				for _ = 1, enemy.amount do
+					task.wait(1)
+					self:SpawnEnemy(enemy.enemy)
+				end
 			end
 
-			self:SpawnEnemy()
+			task.wait(length)
 		end
-	end)
+	end
+
+	warn("OVER")
 end
 
+function EnemyService:SpawnEnemy(enemyName)
+	local enemyTemplate: Model = ReplicatedStorage.Assets.Enemies:FindFirstChild(enemyName)
 
-function EnemyService:KnitInit()
-	
-end
+	if not enemyTemplate then
+		warn("EnemyService:SpawnEnemy - No enemy template found for " .. enemyName)
+		return
+	end
 
-function EnemyService:SpawnEnemy()
-	local newEnemy = ReplicatedStorage.Assets.Enemies.BaconHair:Clone()
+	local newEnemy = enemyTemplate:Clone()
 
 	newEnemy.Parent = workspace
 	newEnemy:PivotTo(workspace.Nodes["0"].CFrame)
