@@ -1,8 +1,12 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local Knit = require(ReplicatedStorage.Packages.Knit)
 local Component = require(ReplicatedStorage.Packages.Component)
 local TroveAdder = require(ReplicatedStorage.ComponentExtensions.TroveAdder)
 local Tower = require(script.Parent.Tower)
+
+local SPEED = 100
+local DAMAGE = 10
 
 local GunTower = Component.new({ Tag = "GunTower", Extensions = {TroveAdder} })
 
@@ -21,7 +25,20 @@ function GunTower:Start()
 end
 
 function GunTower:Shoot()
-	print("Shoot")
+	local enemyPrimaryPart = self._tower:GetEnemyPrimaryPart()
+	local attachment = self.Instance:FindFirstChild("Attachment", true)
+
+	local startPos = attachment.WorldPosition
+	local endPos = enemyPrimaryPart.Position
+
+	local distance = (startPos - endPos).Magnitude
+	local travelTime = distance / SPEED
+
+	Knit.GetService("BulletService"):RenderBullet(startPos, endPos, "Bullet")
+
+	task.delay(travelTime, function()
+		enemyPrimaryPart.Parent.Humanoid:TakeDamage(DAMAGE)
+	end)
 end
 
 

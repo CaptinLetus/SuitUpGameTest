@@ -11,8 +11,8 @@ local Tower = require(script.Parent.Tower)
 local BOMB_OFFSET = CFrame.new(0, 0, -5) -- shot a bomb a bit in front of the enemy
 
 local assets = ReplicatedStorage:FindFirstChild("Assets")
-local weapons = assets:FindFirstChild("Weapons")
-local bomb = weapons:FindFirstChild("Bomb")
+local bullets = assets:FindFirstChild("Bullets")
+local bomb = bullets:FindFirstChild("Bomb")
 
 local BombLauncher = Component.new({ Tag = "BombLauncher", Extensions = { TroveAdder } })
 
