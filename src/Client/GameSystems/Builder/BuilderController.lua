@@ -49,6 +49,10 @@ function BuilderController:ListenForClick()
 end
 
 function BuilderController:Clicked(base: BasePart)
+	if base:GetAttribute("ActiveTower") then
+		return
+	end
+
 	buildViewModel:setBase(base)
 end
 

@@ -24,6 +24,11 @@ function TowerService.Client:BuildTower(player: Player, towerName: string, base:
 		return false, "ERROR"
 	end
 
+	if base:GetAttribute("ActiveTower") then
+		warn("Base already has a tower")
+		return false, "ERROR"
+	end
+
 	local price = towerTemplate:GetAttribute("Price")
 
 	if not CurrencyService:CanAfford(player, price) then
@@ -37,6 +42,8 @@ function TowerService.Client:BuildTower(player: Player, towerName: string, base:
 
 	newTower.Parent = workspace
 	newTower:PivotTo(base.CFrame)
+
+	base:SetAttribute("ActiveTower", newTower.Name)
 
 	return true
 end
