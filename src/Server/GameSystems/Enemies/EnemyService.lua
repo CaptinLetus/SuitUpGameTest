@@ -6,12 +6,21 @@ local currentLevel = require(ReplicatedStorage.Data.Levels.FirstLevel)
 
 local EnemyService = Knit.CreateService({
 	Name = "EnemyService",
-	Client = {},
+	Client = {
+		CurrentLevel = Knit.CreateProperty({
+			level = nil,
+			startTime = 0,
+		})
+	},
 })
 
 function EnemyService:KnitStart()
 	task.wait(5) -- TODO replace with onboarding
 
+	self.Client.CurrentLevel:Set({
+		level = currentLevel,
+		startTime = workspace:GetServerTimeNow(),
+	})
 	self:RunLevel()
 end
 

@@ -30,6 +30,11 @@ function InterfaceController:KnitStart()
 	Knit.GetService("LivesService").Lives:Observe(function(amount)
 		viewModel:setLives(amount)
 	end)
+
+	Knit.GetService("EnemyService").CurrentLevel:Observe(function(info)
+		viewModel:setCurrentLevel(info.level)
+		viewModel:setLevelStartTime(info.startTime)
+	end)
 end
 
 return InterfaceController
