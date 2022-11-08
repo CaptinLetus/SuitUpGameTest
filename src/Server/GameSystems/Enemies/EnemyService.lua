@@ -11,15 +11,7 @@ local EnemyService = Knit.CreateService {
 
 
 function EnemyService:KnitStart()
-	-- task.spawn(function ()
-	-- 	while task.wait(5) do
-	-- 		if not Knit.GetService("LivesService"):IsAlive() then
-	-- 			continue
-	-- 		end
-
-	-- 		self:SpawnEnemy()
-	-- 	end
-	-- end)
+	task.wait(5) -- TODO replace with onboarding
 
 	self:RunLevel()
 end

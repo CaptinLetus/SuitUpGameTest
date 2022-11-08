@@ -19,7 +19,8 @@ function Enemy:Start()
 
 		Knit.GetService("CurrencyService"):Increment(player, COINS_PER_KILL)
 
-		self.Instance:BreakJoints()
+		self.Instance:BreakJoints() -- sometimes the joints don't break on their own
+		
 		task.wait(3)
 		self.Instance:Destroy()
 	end)
