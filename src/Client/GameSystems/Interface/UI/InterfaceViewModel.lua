@@ -14,6 +14,8 @@ function InterfaceViewModel.new(): table
 
 	self.currency = 0
 	self.lives = 0
+	self.currentLevel = nil
+	self.levelStartTime = 0
 
 	return setmetatable(self, InterfaceViewModel)
 end
@@ -25,6 +27,16 @@ end
 
 function InterfaceViewModel:setLives(newLives: number)
 	self.lives = newLives
+	self:update()
+end
+
+function InterfaceViewModel:setCurrentLevel(newLevel: string)
+	self.currentLevel = newLevel
+	self:update()
+end
+
+function InterfaceViewModel:setLevelStartTime(newLevelStartTime: number)
+	self.levelStartTime = newLevelStartTime
 	self:update()
 end
 

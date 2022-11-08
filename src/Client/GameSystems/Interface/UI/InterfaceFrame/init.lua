@@ -3,6 +3,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Roact = require(ReplicatedStorage.Packages.Roact)
 local Panel = require(script.Panel)
 local Lives = require(script.Lives)
+local Waves = require(script.Waves)
 
 local InterfaceFrame = Roact.Component:extend("InterfaceFrame")
 
@@ -57,6 +58,9 @@ function InterfaceFrame:render()
 		}),
 		Lives = Roact.createElement(Lives, {
 			lives = self.state.lives,
+			viewModel = self.props.viewModel,
+		}),
+		Waves = Roact.createElement(Waves, {
 			viewModel = self.props.viewModel,
 		}),
 	})

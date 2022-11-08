@@ -1,0 +1,3 @@
+return {
+	TIME_BETWEEN_ENEMY_AMOUNT = 1,
+}
