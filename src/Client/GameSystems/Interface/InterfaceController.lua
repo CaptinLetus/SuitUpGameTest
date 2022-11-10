@@ -56,6 +56,10 @@ function InterfaceController:KnitStart()
 		end
 	end)
 
+	Knit.GetService("LivesService").Won:Observe(function(didWin)
+		viewModel:setShowWin(didWin)
+	end)
+
 	Knit.GetService("EnemyService").CurrentLevel:Observe(function(info)
 		viewModel:setCurrentLevel(info.level)
 		viewModel:setLevelStartTime(info.startTime)

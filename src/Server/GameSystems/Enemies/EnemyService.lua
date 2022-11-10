@@ -3,6 +3,9 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Knit = require(ReplicatedStorage.Packages.Knit)
 local GlobalSettings = require(ReplicatedStorage.Data.GlobalSettings)
 local currentLevel = require(ReplicatedStorage.Data.Levels.FirstLevel)
+local Enemy = require(script.Parent.Enemy)
+
+local doneWave = false
 
 local EnemyService = Knit.CreateService({
 	Name = "EnemyService",
@@ -10,7 +13,7 @@ local EnemyService = Knit.CreateService({
 		CurrentLevel = Knit.CreateProperty({
 			level = nil,
 			startTime = 0,
-		})
+		}),
 	},
 })
 
@@ -29,27 +32,31 @@ function EnemyService:PlayGame()
 end
 
 function EnemyService:RunLevel()
-	self._gameThread = task.spawn(function ()
-		for i, wave in ipairs(currentLevel) do
+	self._gameThread = task.spawn(function()
+		for waveNum, wave in ipairs(currentLevel) do
 			local enemies = wave.enemies
 			local length = wave.length
 			local loop = wave.loop or 1
-	
-			for _ = 1, loop do
+
+			for loopNum = 1, loop do
 				for _, enemy in ipairs(enemies) do
 					for _ = 1, enemy.amount do
 						task.wait(GlobalSettings.TIME_BETWEEN_ENEMY_AMOUNT)
 						self:SpawnEnemy(enemy.enemy)
 					end
 				end
-	
-				task.wait(length)
+
+				local isLastWave = waveNum == #currentLevel
+				local isLastLoop = loopNum == loop
+
+				if isLastWave and isLastLoop then
+					doneWave = true
+				else
+					task.wait(length)
+				end
 			end
 		end
 	end)
-	
-
-	warn("OVER")
 end
 
 function EnemyService:SpawnEnemy(enemyName)
@@ -66,10 +73,27 @@ function EnemyService:SpawnEnemy(enemyName)
 	newEnemy:PivotTo(workspace.Nodes["0"].CFrame)
 end
 
+function EnemyService:Died()
+	local enemies: table = Enemy:GetAll()
+	local amountOfEnemies = 0
+
+	for _, enemy in enemies do
+		if enemy.Instance.Humanoid.Health > 0 then
+			amountOfEnemies = amountOfEnemies + 1
+		end
+	end
+
+	if amountOfEnemies == 0 and doneWave then
+		Knit.GetService("LivesService"):Win()
+	end
+end
+
 function EnemyService:Reset()
 	if self._gameThread then
 		task.cancel(self._gameThread)
 	end
+
+	doneWave = false
 
 	self:PlayGame()
 end

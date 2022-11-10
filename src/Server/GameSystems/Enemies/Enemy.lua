@@ -21,6 +21,8 @@ function Enemy:Start()
 
 		self.Instance:BreakJoints() -- sometimes the joints don't break on their own
 		
+		Knit.GetService("EnemyService"):Died()
+
 		task.wait(3)
 		self.Instance:Destroy()
 	end)

@@ -11,6 +11,7 @@ local LivesService = Knit.CreateService({
 	Name = "LivesService",
 	Client = {
 		Lives = Knit.CreateProperty(START_LIVES),
+		Won = Knit.CreateProperty(false),
 	},
 })
 
@@ -46,6 +47,10 @@ function LivesService:IsAlive()
 	return self.Client.Lives:Get() > 0
 end
 
+function LivesService:Win()
+	self.Client.Won:Set(true)
+end
+
 function LivesService.Client:ResetGame()
 	self.Lives:Set(START_LIVES)
 
@@ -55,12 +60,8 @@ function LivesService.Client:ResetGame()
 	Knit.GetService("TowerService"):Reset()
 
 	self.Server:ClearMap()
+	self.Won:Set(false)
 end
 
-function LivesService:KnitStart()
-	task.wait(10)
-
-	self.Client:ResetGame()
-end
 
 return LivesService
