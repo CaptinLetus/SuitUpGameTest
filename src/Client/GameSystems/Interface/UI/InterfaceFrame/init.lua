@@ -3,6 +3,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Roact = require(ReplicatedStorage.Packages.Roact)
 local Panel = require(script.Panel)
 local Lives = require(script.Lives)
+local Winner = require(script.Winner)
 local Waves = require(script.Waves)
 
 local InterfaceFrame = Roact.Component:extend("InterfaceFrame")
@@ -11,6 +12,7 @@ function InterfaceFrame:init()
 	self:setState({
 		currency = self.props.viewModel.currency,
 		lives = self.props.viewModel.lives,
+		showWin = self.props.viewModel.showWin,
 	})
 end
 
@@ -19,6 +21,7 @@ function InterfaceFrame:didMount()
 		self:setState({
 			currency = viewModel.currency,
 			lives = viewModel.lives,
+			showWin = viewModel.showWin,
 		})
 	end)
 end
@@ -61,6 +64,10 @@ function InterfaceFrame:render()
 			viewModel = self.props.viewModel,
 		}),
 		Waves = Roact.createElement(Waves, {
+			viewModel = self.props.viewModel,
+		}),
+		Winner = Roact.createElement(Winner, {
+			showWin = self.state.showWin,
 			viewModel = self.props.viewModel,
 		}),
 	})

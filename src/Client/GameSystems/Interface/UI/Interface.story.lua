@@ -11,7 +11,8 @@ return function(target)
 	viewModel:setLives(3)
 	viewModel:setCurrentLevel(firstLevel)
 	viewModel:setLevelStartTime(workspace:GetServerTimeNow())
-
+	viewModel:setShowWin(true)
+	
 	local element = Roact.createElement(require(script.Parent.InterfaceFrame), {
 		viewModel = viewModel
 	})

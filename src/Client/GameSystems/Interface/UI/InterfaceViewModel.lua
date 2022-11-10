@@ -16,6 +16,7 @@ function InterfaceViewModel.new(): table
 	self.lives = 0
 	self.currentLevel = nil
 	self.levelStartTime = 0
+	self.showWin = false
 
 	return setmetatable(self, InterfaceViewModel)
 end
@@ -37,6 +38,11 @@ end
 
 function InterfaceViewModel:setLevelStartTime(newLevelStartTime: number)
 	self.levelStartTime = newLevelStartTime
+	self:update()
+end
+
+function InterfaceViewModel:setShowWin(newShowWin: boolean)
+	self.showWin = newShowWin
 	self:update()
 end
 
