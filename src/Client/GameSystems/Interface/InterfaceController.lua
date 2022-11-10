@@ -1,3 +1,7 @@
+--[[
+	This controller controls all of the UI in the game
+]]
+
 local CollectionService = game:GetService("CollectionService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local SoundService = game:GetService("SoundService")
@@ -43,29 +47,52 @@ function InterfaceController:PlayAlarmSound()
 	end)
 end
 
+function InterfaceController:CurrencyChanged(amount)
+	viewModel:setCurrency(amount)
+end
+
+function InterfaceController:LivesChanged(amount)
+	viewModel:setLives(amount)
+
+	if amount < START_LIVES then
+		self:PlayAlarmSound()
+	end
+end
+
+function InterfaceController:WonChanged(didWin)
+	viewModel:setShowWin(didWin)
+end
+
+function InterfaceController:CurrentLevelUpdated(info)
+	viewModel:setCurrentLevel(info.level)
+	viewModel:setLevelStartTime(info.startTime)
+end
+
+function InterfaceController:SetupRemotes()
+	local CurrencyService = Knit.GetService("CurrencyService")
+	local enemyService = Knit.GetService("EnemyService")
+	local livesService = Knit.GetService("LivesService")
+
+	CurrencyService.Currency:Observe(function(amount)
+		self:CurrencyChanged(amount)
+	end)
+
+	livesService.Lives:Observe(function(amount)
+		self:LivesChanged(amount)
+	end)
+
+	livesService.Won:Observe(function(didWin)
+		self:WonChanged(didWin)
+	end)
+
+	enemyService.CurrentLevel:Observe(function(info)
+		self:CurrentLevelUpdated(info)
+	end)
+end
+
 function InterfaceController:KnitStart()
-	Knit.GetService("CurrencyService").Currency:Observe(function(amount)
-		viewModel:setCurrency(amount)
-	end)
-
-	Knit.GetService("LivesService").Lives:Observe(function(amount)
-		viewModel:setLives(amount)
-
-		if amount < START_LIVES then
-			self:PlayAlarmSound()
-		end
-	end)
-
-	Knit.GetService("LivesService").Won:Observe(function(didWin)
-		viewModel:setShowWin(didWin)
-	end)
-
-	Knit.GetService("EnemyService").CurrentLevel:Observe(function(info)
-		viewModel:setCurrentLevel(info.level)
-		viewModel:setLevelStartTime(info.startTime)
-	end)
-
-	alarmSound.Parent = CollectionService:GetTagged("Door")[1]
+	self:SetupRemotes()
+	alarmSound.Parent = CollectionService:GetTagged("Door")[1] -- there is only 1 door in the map
 end
 
 return InterfaceController
