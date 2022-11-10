@@ -38,12 +38,7 @@ return function(props)
 			Color = Color3.fromRGB(255, 255, 255),
 		}),
 		ChildrenHolder = Roact.createElement("Frame", {
-			Size = UDim2.new(
-				1,
-				0,
-				1 - titleSize.Y.Scale,
-				1 - titleSize.Y.Offset
-			),
+			Size = UDim2.new(1, 0, 1 - titleSize.Y.Scale, 1 - titleSize.Y.Offset),
 			AnchorPoint = Vector2.new(0, 1),
 			Position = UDim2.fromScale(0, 1),
 			BackgroundTransparency = 1,

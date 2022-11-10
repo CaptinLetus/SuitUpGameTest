@@ -3,15 +3,14 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Roact = require(ReplicatedStorage.Packages.Roact)
 
-
-return function (props)
+return function(props)
 	local showUI = props.lives <= 0
 
 	return Roact.createElement("Frame", {
 		Size = UDim2.fromScale(1, 1),
 		BackgroundTransparency = 0.5,
 		BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-		Visible = showUI
+		Visible = showUI,
 	}, {
 		GameOverText = Roact.createElement("TextLabel", {
 			Size = UDim2.fromScale(1, 0.5),
@@ -40,7 +39,7 @@ return function (props)
 		}, {
 			Blur = Roact.createElement("BlurEffect", {
 				Size = 10,
-				Enabled = showUI
+				Enabled = showUI,
 			}),
 		}),
 	})

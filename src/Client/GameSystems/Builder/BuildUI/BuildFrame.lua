@@ -60,7 +60,7 @@ function BuildFrame:getTowerButtons()
 				onClick = function()
 					self.props.viewModel:buildTower(tower)
 				end,
-				layoutOrder = price
+				layoutOrder = price,
 			})
 		)
 	end

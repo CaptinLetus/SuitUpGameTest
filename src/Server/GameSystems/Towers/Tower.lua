@@ -24,7 +24,7 @@ function Tower:Construct()
 
 	self.Fire = Signal.new()
 	self._trove:Add(self.Fire)
-	
+
 	self:SetupTimer()
 end
 
@@ -44,6 +44,7 @@ function Tower:GetEnemyPrimaryPart()
 	return selectedEnemy.PrimaryPart
 end
 
+-- Pick an enemy that is within the radius, and is the further along the path
 function Tower:SelectEnemy()
 	local allEnemies = CollectionService:GetTagged("Enemy")
 
@@ -51,7 +52,7 @@ function Tower:SelectEnemy()
 	local selectedDistance = 0
 
 	for _, enemy: Model in allEnemies do
-		local humanoid = enemy:FindFirstChild("Humanoid")
+		local humanoid: Humanoid = enemy:FindFirstChild("Humanoid")
 
 		if humanoid.Health <= 0 then
 			continue

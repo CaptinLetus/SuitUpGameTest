@@ -8,12 +8,11 @@ local Tower = require(script.Parent.Tower)
 local SPEED = 100
 local DAMAGE = 8
 
-local GunTower = Component.new({ Tag = "GunTower", Extensions = {TroveAdder} })
+local GunTower = Component.new({ Tag = "GunTower", Extensions = { TroveAdder } })
 
 function GunTower:Construct()
 	self._radius = self.Instance:GetAttribute("Radius")
 	self._gun = self.Instance:FindFirstChild("Gun")
-
 end
 
 function GunTower:Start()
@@ -41,7 +40,6 @@ function GunTower:Shoot()
 	end)
 end
 
-
 function GunTower:PointTowardsEnemy()
 	local enemyPrimaryPart = self._tower:GetEnemyPrimaryPart()
 
@@ -57,7 +55,6 @@ function GunTower:PointTowardsEnemy()
 
 	self._gun:PivotTo(uprightCFrame)
 end
-
 
 function GunTower:SteppedUpdate()
 	self:PointTowardsEnemy()

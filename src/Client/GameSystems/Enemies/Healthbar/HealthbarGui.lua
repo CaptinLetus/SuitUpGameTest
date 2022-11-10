@@ -8,7 +8,7 @@ return function(props)
 		ExtentsOffset = Vector3.new(0, 2.5, 0),
 		Size = UDim2.fromScale(3, 1.5),
 		ResetOnSpawn = false,
-		Adornee = props.target
+		Adornee = props.target,
 	}, {
 		HealthbarFrame = Roact.createElement(HealthbarFrame, {
 			viewModel = props.viewModel,
