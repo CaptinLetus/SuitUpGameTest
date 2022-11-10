@@ -10,9 +10,11 @@ local InterfaceViewModel = require(script.Parent.UI.InterfaceViewModel)
 
 local START_LIVES = 5
 
-local InterfaceController = Knit.CreateController({ Name = "InterfaceController" })
-
 local viewModel = InterfaceViewModel.new()
+local alarmSound = SoundService.Alarm:Clone()
+local alarmPlayed = 0
+
+local InterfaceController = Knit.CreateController({ Name = "InterfaceController" })
 
 function InterfaceController:KnitInit()
 	Roact.mount(
@@ -27,11 +29,18 @@ function InterfaceController:KnitInit()
 end
 
 function InterfaceController:PlayAlarmSound()
-	local newAlarm = SoundService.Alarm:Clone()
+	local t = os.clock()
+	alarmPlayed = t
 
-	newAlarm.PlayOnRemove = true
-	newAlarm.Parent = CollectionService:GetTagged("Door")[1]
-	newAlarm:Destroy()
+	if not alarmSound.Playing then
+		alarmSound:Play()
+	end
+
+	task.delay(alarmSound.TimeLength, function()
+		if alarmPlayed == t then
+			alarmSound:Stop()
+		end
+	end)
 end
 
 function InterfaceController:KnitStart()
@@ -51,6 +60,8 @@ function InterfaceController:KnitStart()
 		viewModel:setCurrentLevel(info.level)
 		viewModel:setLevelStartTime(info.startTime)
 	end)
+
+	alarmSound.Parent = CollectionService:GetTagged("Door")[1]
 end
 
 return InterfaceController
