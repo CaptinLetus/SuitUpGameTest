@@ -10,7 +10,7 @@ local ChatService = game:GetService("Chat")
 local Knit = require(ReplicatedStorage.Packages.Knit)
 local Component = require(ReplicatedStorage.Packages.Component)
 local TroveAdder = require(ReplicatedStorage.ComponentExtensions.TroveAdder)
-local Bomb = require(ServerScriptService.GameSystems.Weapons.Bomb)
+local Bomb = require(ServerScriptService.GameSystems.Bullets.Bomb)
 local Timer = require(ReplicatedStorage.Packages.Timer)
 
 local BOMB_PICKUP_DISTANCE = 5
