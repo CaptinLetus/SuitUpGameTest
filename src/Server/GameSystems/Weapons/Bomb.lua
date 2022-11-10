@@ -6,7 +6,7 @@ local getCurveVelocity = require(ReplicatedStorage.Utils.getCurveVelocity)
 local Enemy = require(ServerScriptService.GameSystems.Enemies.Enemy)
 
 local EXPLODE_TIME = 2
-local DAMAGE = 20
+local DAMAGE = 30
 local RADIUS = 15
 
 local Bomb = Component.new({ Tag = "Bomb", Extensions = {} })

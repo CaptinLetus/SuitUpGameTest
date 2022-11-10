@@ -9,6 +9,8 @@ local Knit = require(ReplicatedStorage.Packages.Knit)
 local assets = ReplicatedStorage:FindFirstChild("Assets")
 local towers = assets:FindFirstChild("Towers")
 
+local basesToTower = {}
+
 local TowerService = Knit.CreateService({
 	Name = "TowerService",
 	Client = {},
@@ -44,6 +46,28 @@ function TowerService.Client:BuildTower(player: Player, towerName: string, base:
 	newTower:PivotTo(base.CFrame)
 
 	base:SetAttribute("ActiveTower", newTower.Name)
+	basesToTower[base] = newTower
+
+	return true
+end
+
+function TowerService.Client:SellTower(player: Player, base: BasePart)
+	local CurrencyService = Knit.GetService("CurrencyService")
+
+	local tower = basesToTower[base]
+
+	if not tower then
+		warn("No tower found for base", base)
+		return false, "ERROR"
+	end
+
+	local price = tower:GetAttribute("Price") / 2
+
+	CurrencyService:Increment(player, price)
+
+	tower:Destroy()
+	base:SetAttribute("ActiveTower", nil)
+	basesToTower[base] = nil
 
 	return true
 end

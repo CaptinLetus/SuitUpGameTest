@@ -5,7 +5,7 @@ local Knit = require(ReplicatedStorage.Packages.Knit)
 local Component = require(ReplicatedStorage.Packages.Component)
 local TroveAdder = require(ReplicatedStorage.ComponentExtensions.TroveAdder)
 
-local COINS_PER_KILL = 10
+local COINS_PER_KILL = 5
 
 local Enemy = Component.new({ Tag = "Enemy", Extensions = { TroveAdder } })
 

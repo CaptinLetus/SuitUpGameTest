@@ -13,9 +13,8 @@ local TroveAdder = require(ReplicatedStorage.ComponentExtensions.TroveAdder)
 local Bomb = require(ServerScriptService.GameSystems.Weapons.Bomb)
 local Timer = require(ReplicatedStorage.Packages.Timer)
 
-local HIP_HEIGHT = 1.8
 local BOMB_PICKUP_DISTANCE = 5
-local CHANCE_TO_PICK_UP_BOMB = 0.3
+local CHANCE_TO_PICK_UP_BOMB = 0.05
 local BOMB_CHANCE_UPDATE_RATE = 5
 local CURIOUS_CHATS = {
 	"🙃",
@@ -42,6 +41,8 @@ function Walker:Construct()
 
 	self._humanoid = self.Instance:WaitForChild("Humanoid")
 
+	self.Instance.PrimaryPart:SetNetworkOwner(nil) -- prevent network changing to client
+
 	self:UpdateAttributes()
 end
 
@@ -59,7 +60,7 @@ function Walker:UpdateProgressAttribute()
 	local totalDistanceBetweenNodes = (nextNode.Position - previousNode.Position).Magnitude
 	local distanceToNext = (nextNode.Position - currentPosition).Magnitude
 
-	local percent = distanceToNext / totalDistanceBetweenNodes
+	local percent = 1 - distanceToNext / totalDistanceBetweenNodes
 
 	self.Instance:SetAttribute("ProgressAlongTrack", self._previousNode + percent)
 end
@@ -136,7 +137,7 @@ function Walker:TargetBomb(bomb)
 end
 
 function Walker:UpdateBombChance()
-	self._willPickup = random:NextNumber() > CHANCE_TO_PICK_UP_BOMB 
+	self._willPickup = random:NextNumber() > (1-CHANCE_TO_PICK_UP_BOMB )
 end
 
 function Walker:CheckNearbyBombs()

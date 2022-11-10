@@ -47,7 +47,7 @@ function Waves:getWaveElements()
 					table.insert(
 						elements,
 						Roact.createElement("Frame", {
-							Size = UDim2.fromScale(0.8, 0.8),
+							Size = UDim2.fromScale(0.5, 0.5),
 							Position = UDim2.new(1, -offset, 0.5, 0),
 							AnchorPoint = Vector2.new(1, 0.5),
 							SizeConstraint = Enum.SizeConstraint.RelativeYY,
