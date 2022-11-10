@@ -19,6 +19,8 @@ function Bullet:Fire(startPosition: Vector3, endPosition: Vector3, cache: PartCa
 
 	self._lookAtCFrame = CFrame.lookAt(startPosition, endPosition)
 	self._endCFrame = self._lookAtCFrame * CFrame.new(0, 0, -distance)
+
+	self.Instance.Shot:Play()
 end
 
 function Bullet:RenderSteppedUpdate()
