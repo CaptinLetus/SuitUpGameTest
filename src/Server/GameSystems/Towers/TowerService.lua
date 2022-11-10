@@ -72,4 +72,12 @@ function TowerService.Client:SellTower(player: Player, base: BasePart)
 	return true
 end
 
+function TowerService:Reset()
+	for base in pairs(basesToTower) do
+		base:SetAttribute("ActiveTower", nil)
+	end
+
+	basesToTower = {}
+end
+
 return TowerService
