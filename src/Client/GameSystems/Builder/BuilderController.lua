@@ -1,3 +1,7 @@
+--[[
+	This controller controls building towers on the client
+]]
+
 local CollectionService = game:GetService("CollectionService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -31,20 +35,24 @@ function BuilderController:KnitStart()
 	self:ListenForClick()
 end
 
+function BuilderController:MouseClick()
+	local result = Mouse:Raycast(params)
+
+	if not result then
+		buildViewModel:setBase(nil)
+		return
+	end
+
+	if CollectionService:HasTag(result.Instance, "Base") then
+		self:Clicked(result.Instance)
+	else
+		buildViewModel:setBase(nil)
+	end
+end
+
 function BuilderController:ListenForClick()
 	Mouse.LeftDown:Connect(function()
-		local result = Mouse:Raycast(params)
-
-		if not result then
-			buildViewModel:setBase(nil)
-			return
-		end
-
-		if CollectionService:HasTag(result.Instance, "Base") then
-			self:Clicked(result.Instance)
-		else
-			buildViewModel:setBase(nil)
-		end
+		self:MouseClick()
 	end)
 end
 

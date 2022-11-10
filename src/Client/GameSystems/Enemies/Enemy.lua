@@ -1,3 +1,7 @@
+--[[
+	This component control the healthbars on the client for enemies
+]]
+
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 

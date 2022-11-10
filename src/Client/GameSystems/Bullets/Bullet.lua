@@ -1,3 +1,7 @@
+--[[
+	This component controls the bullets
+]]
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Component = require(ReplicatedStorage.Packages.Component)

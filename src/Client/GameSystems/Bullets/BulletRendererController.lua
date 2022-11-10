@@ -1,3 +1,9 @@
+--[[
+	This controller is used to render bullets
+
+	We use PartCache to create object pools for the bullets to reduce the amount of garbage created
+]]
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Knit = require(ReplicatedStorage.Packages.Knit)
@@ -27,6 +33,7 @@ local function createCacheForBullet(bullet: Instance)
 	caches[bullet.Name] = cache
 end
 
+-- returns the component module that corresponds to the bullet
 local function getComponentForBullet(bulletName: string)
 	local componentModule = nil
 
