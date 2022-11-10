@@ -51,7 +51,15 @@ function LivesService.Client:ResetGame()
 
 	local player = Players:GetPlayers()[1]
 	Knit.GetService("CurrencyService"):Reset(player)
-
+	Knit.GetService("EnemyService"):Reset()
+	
 	self.Server:ClearMap()
 end
+
+function LivesService:KnitStart()
+	task.wait(10)
+
+	self.Client:ResetGame()
+end
+
 return LivesService
