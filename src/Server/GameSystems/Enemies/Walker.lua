@@ -17,9 +17,9 @@ local BOMB_PICKUP_DISTANCE = 5
 local CHANCE_TO_PICK_UP_BOMB = 0.05
 local BOMB_CHANCE_UPDATE_RATE = 5
 local CURIOUS_CHATS = {
-	"🙃",
-	"😎",
-	"🙂",
+	"ooh whats this?",
+	"fancy bomb. i like",
+	"a gift!",
 	"lord bacon will approve",
 	"oooh shiny",
 	"oh look, a gift!",
@@ -51,6 +51,10 @@ function Walker:UpdateAttributes()
 	self.Instance:SetAttribute("NextNode", self._nextNode)
 end
 
+--[[
+	Sets the ProgressAlongTrack attribute to a value lastNode.percentToNext 
+	ie, 1.5 is 50% of the way from node 1 to node 2
+]]
 function Walker:UpdateProgressAttribute()
 	local nextNode: BasePart = nodes:FindFirstChild(self._nextNode)
 	local previousNode: BasePart = nodes:FindFirstChild(self._previousNode)
@@ -75,6 +79,7 @@ function Walker:Start()
 	end))
 end
 
+-- a node has been reached
 function Walker:MoveToFinished(reached)
 	if not reached then
 		warn("There was an issue")
@@ -85,6 +90,7 @@ function Walker:MoveToFinished(reached)
 	self:UpdateNode()
 end
 
+-- move to the next node
 function Walker:UpdateNode()
 	if self._targetBomb then
 		return
@@ -106,6 +112,9 @@ function Walker:UpdateNode()
 	self:UpdateAttributes()
 end
 
+--[[
+	Looks for nearby bomb.  If found, pick it up
+]]
 function Walker:TargetBomb(bomb)
 	local distance = (bomb.Instance.Position - self.Instance.PrimaryPart.Position).Magnitude
 
@@ -137,7 +146,7 @@ function Walker:TargetBomb(bomb)
 end
 
 function Walker:UpdateBombChance()
-	self._willPickup = random:NextNumber() > (1-CHANCE_TO_PICK_UP_BOMB )
+	self._willPickup = random:NextNumber() > (1 - CHANCE_TO_PICK_UP_BOMB)
 end
 
 function Walker:CheckNearbyBombs()
@@ -148,7 +157,7 @@ function Walker:CheckNearbyBombs()
 	if not self._willPickup then
 		return
 	end
-	
+
 	local bombs = Bomb:GetAll()
 
 	for _, bomb in bombs do
@@ -169,7 +178,6 @@ function Walker:HeartbeatUpdate()
 
 	self:UpdateProgressAttribute()
 	self:CheckNearbyBombs()
-
 
 	self._humanoid.WalkToPoint = self._target.Position
 end

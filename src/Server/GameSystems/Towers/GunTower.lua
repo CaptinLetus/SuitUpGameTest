@@ -1,3 +1,7 @@
+--[[
+	This component controls the gun tower
+]]
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Knit = require(ReplicatedStorage.Packages.Knit)
