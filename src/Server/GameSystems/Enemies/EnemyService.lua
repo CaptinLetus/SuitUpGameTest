@@ -1,3 +1,7 @@
+--[[
+	This service controls spawning enemies based on the level file
+]]
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Knit = require(ReplicatedStorage.Packages.Knit)
@@ -31,30 +35,34 @@ function EnemyService:PlayGame()
 	self:RunLevel()
 end
 
+function EnemyService:SpawnEnemiesFromWave(wave, waveNum)
+	local enemies = wave.enemies
+	local length = wave.length
+	local loop = wave.loop or 1
+
+	for loopNum = 1, loop do
+		for _, enemy in ipairs(enemies) do
+			for _ = 1, enemy.amount do
+				task.wait(GlobalSettings.TIME_BETWEEN_ENEMY_AMOUNT)
+				self:SpawnEnemy(enemy.enemy)
+			end
+		end
+
+		local isLastWave = waveNum == #currentLevel
+		local isLastLoop = loopNum == loop
+
+		if isLastWave and isLastLoop then
+			doneWave = true
+		else
+			task.wait(length)
+		end
+	end
+end
+
 function EnemyService:RunLevel()
 	self._gameThread = task.spawn(function()
 		for waveNum, wave in ipairs(currentLevel) do
-			local enemies = wave.enemies
-			local length = wave.length
-			local loop = wave.loop or 1
-
-			for loopNum = 1, loop do
-				for _, enemy in ipairs(enemies) do
-					for _ = 1, enemy.amount do
-						task.wait(GlobalSettings.TIME_BETWEEN_ENEMY_AMOUNT)
-						self:SpawnEnemy(enemy.enemy)
-					end
-				end
-
-				local isLastWave = waveNum == #currentLevel
-				local isLastLoop = loopNum == loop
-
-				if isLastWave and isLastLoop then
-					doneWave = true
-				else
-					task.wait(length)
-				end
-			end
+			self:SpawnEnemiesFromWave(wave, waveNum)
 		end
 	end)
 end
@@ -74,10 +82,9 @@ function EnemyService:SpawnEnemy(enemyName)
 end
 
 function EnemyService:Died()
-	local enemies: table = Enemy:GetAll()
 	local amountOfEnemies = 0
 
-	for _, enemy in enemies do
+	for _, enemy in Enemy:GetAll() do
 		if enemy.Instance.Humanoid.Health > 0 then
 			amountOfEnemies = amountOfEnemies + 1
 		end
