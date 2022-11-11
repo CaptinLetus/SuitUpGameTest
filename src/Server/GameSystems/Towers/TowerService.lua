@@ -2,9 +2,11 @@
 	This service is responsible for building new towers in the game
 ]]
 
+local CollectionService = game:GetService("CollectionService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Knit = require(ReplicatedStorage.Packages.Knit)
+local Signal = require(ReplicatedStorage.Packages.Signal)
 
 local assets = ReplicatedStorage:FindFirstChild("Assets")
 local towers = assets:FindFirstChild("Towers")
@@ -15,6 +17,16 @@ local TowerService = Knit.CreateService({
 	Name = "TowerService",
 	Client = {},
 })
+
+TowerService.TowerBuilt = Signal.new()
+
+local function removeArrows()
+	local arrows = CollectionService:GetTagged("Arrow")
+
+	for _, arrow in ipairs(arrows) do
+		arrow:Destroy()
+	end
+end
 
 function TowerService.Client:BuildTower(player: Player, towerName: string, base: BasePart)
 	local CurrencyService = Knit.GetService("CurrencyService")
@@ -47,6 +59,10 @@ function TowerService.Client:BuildTower(player: Player, towerName: string, base:
 
 	base:SetAttribute("ActiveTower", newTower.Name)
 	basesToTower[base] = newTower
+
+	TowerService.TowerBuilt:Fire()
+
+	removeArrows()
 
 	return true
 end

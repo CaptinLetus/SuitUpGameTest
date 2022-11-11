@@ -17,6 +17,7 @@ function InterfaceViewModel.new(): table
 	self.currentLevel = nil
 	self.levelStartTime = 0
 	self.showWin = false
+	self.waveRunning = false
 
 	return setmetatable(self, InterfaceViewModel)
 end
@@ -43,6 +44,11 @@ end
 
 function InterfaceViewModel:setShowWin(newShowWin: boolean)
 	self.showWin = newShowWin
+	self:update()
+end
+
+function InterfaceViewModel:setWaveRunning(newWaveRunning: boolean)
+	self.waveRunning = newWaveRunning
 	self:update()
 end
 

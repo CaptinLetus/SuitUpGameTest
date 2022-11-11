@@ -66,6 +66,7 @@ end
 function InterfaceController:CurrentLevelUpdated(info)
 	viewModel:setCurrentLevel(info.level)
 	viewModel:setLevelStartTime(info.startTime)
+	viewModel:setWaveRunning(info.running)
 end
 
 function InterfaceController:SetupRemotes()

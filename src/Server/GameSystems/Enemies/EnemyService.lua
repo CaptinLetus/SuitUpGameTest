@@ -22,8 +22,6 @@ local EnemyService = Knit.CreateService({
 })
 
 function EnemyService:KnitStart()
-	task.wait(5) -- TODO replace with onboarding
-
 	self:PlayGame()
 end
 
@@ -31,7 +29,9 @@ function EnemyService:PlayGame()
 	self.Client.CurrentLevel:Set({
 		level = currentLevel,
 		startTime = workspace:GetServerTimeNow(),
+		running = false,
 	})
+
 	self:RunLevel()
 end
 
@@ -60,6 +60,14 @@ function EnemyService:SpawnEnemiesFromWave(wave, waveNum)
 end
 
 function EnemyService:RunLevel()
+	Knit.GetService("TowerService").TowerBuilt:Wait()
+
+	self.Client.CurrentLevel:Set({
+		level = currentLevel,
+		startTime = workspace:GetServerTimeNow(),
+		running = true,
+	})
+
 	self._gameThread = task.spawn(function()
 		for waveNum, wave in ipairs(currentLevel) do
 			self:SpawnEnemiesFromWave(wave, waveNum)

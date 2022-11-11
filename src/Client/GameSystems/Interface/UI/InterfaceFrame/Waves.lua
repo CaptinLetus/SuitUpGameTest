@@ -15,6 +15,10 @@ end
 
 function Waves:didMount()
 	self._renderEvent = RunService.RenderStepped:Connect(function()
+		if not self.props.viewModel.waveRunning then
+			return
+		end
+
 		local now = workspace:GetServerTimeNow()
 		local elapsed = now - self.props.viewModel.levelStartTime
 
