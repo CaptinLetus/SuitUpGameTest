@@ -22,6 +22,7 @@ local EnemyService = Knit.CreateService({
 })
 
 function EnemyService:KnitStart()
+	Knit.GetService("TowerService").TowerBuilt:Wait() --onboarding, wait for first tower
 	self:PlayGame()
 end
 
@@ -31,8 +32,6 @@ function EnemyService:PlayGame()
 		startTime = workspace:GetServerTimeNow(),
 		running = false,
 	})
-
-	Knit.GetService("TowerService").TowerBuilt:Wait()
 
 	self:RunLevel()
 end
