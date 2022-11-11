@@ -32,6 +32,8 @@ function EnemyService:PlayGame()
 		running = false,
 	})
 
+	Knit.GetService("TowerService").TowerBuilt:Wait()
+
 	self:RunLevel()
 end
 
@@ -60,15 +62,13 @@ function EnemyService:SpawnEnemiesFromWave(wave, waveNum)
 end
 
 function EnemyService:RunLevel()
-	Knit.GetService("TowerService").TowerBuilt:Wait()
-
-	self.Client.CurrentLevel:Set({
-		level = currentLevel,
-		startTime = workspace:GetServerTimeNow(),
-		running = true,
-	})
-
 	self._gameThread = task.spawn(function()
+		self.Client.CurrentLevel:Set({
+			level = currentLevel,
+			startTime = workspace:GetServerTimeNow(),
+			running = true,
+		})
+
 		for waveNum, wave in ipairs(currentLevel) do
 			self:SpawnEnemiesFromWave(wave, waveNum)
 		end
