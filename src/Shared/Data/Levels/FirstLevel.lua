@@ -101,7 +101,7 @@ return {
 				amount = 5,
 			},
 		},
-		length = 3,
+		length = 1,
 		loop = 3,
 	},
 	{
@@ -110,6 +110,10 @@ return {
 				enemy = "Runner",
 				amount = 4,
 			},
+			{
+				enemy = "Runner",
+				amount = 3,
+			},
 		},
 		length = 0.2,
 	},
@@ -120,8 +124,8 @@ return {
 				amount = 6,
 			},
 		},
-		length = 3,
-		loop = 5,
+		length = 1,
+		loop = 3,
 	},
 	{
 		enemies = {
@@ -129,18 +133,13 @@ return {
 				enemy = "BaconHair",
 				amount = 7,
 			},
-		},
-		length = 4,
-		loop = 3,
-	},
-	{
-		enemies = {
 			{
 				enemy = "Runner",
 				amount = 6,
 			},
 		},
-		length = 0.2,
+		length = 1,
+		loop = 3,
 	},
 	{
 		enemies = {
@@ -149,26 +148,7 @@ return {
 				amount = 8,
 			},
 		},
-		length = 3,
-		loop = 5,
-	},
-	{
-		enemies = {
-			{
-				enemy = "Runner",
-				amount = 6,
-			},
-		},
-		length = 0.2,
-	},
-	{
-		enemies = {
-			{
-				enemy = "BaconHair",
-				amount = 12,
-			},
-		},
-		length = 5,
-		loop = 2,
+		length = 1,
+		loop = 3,
 	},
 }

@@ -10,7 +10,7 @@ local TroveAdder = require(ReplicatedStorage.ComponentExtensions.TroveAdder)
 local Tower = require(script.Parent.Tower)
 
 local SPEED = 100
-local DAMAGE = 8
+local DAMAGE = 12
 
 local GunTower = Component.new({ Tag = "GunTower", Extensions = { TroveAdder } })
 

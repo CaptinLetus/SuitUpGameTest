@@ -3,7 +3,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Knit = require(ReplicatedStorage.Packages.Knit)
 
-local START_AMOUNT = 100
+local START_AMOUNT = 60
 
 local CurrencyService = Knit.CreateService({
 	Name = "CurrencyService",
