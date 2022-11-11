@@ -15,8 +15,9 @@ local EnemyService = Knit.CreateService({
 	Name = "EnemyService",
 	Client = {
 		CurrentLevel = Knit.CreateProperty({
-			level = nil,
-			startTime = 0,
+			level = currentLevel,
+			startTime = workspace:GetServerTimeNow(),
+			running = false,
 		}),
 	},
 })
@@ -27,12 +28,6 @@ function EnemyService:KnitStart()
 end
 
 function EnemyService:PlayGame()
-	self.Client.CurrentLevel:Set({
-		level = currentLevel,
-		startTime = workspace:GetServerTimeNow(),
-		running = false,
-	})
-
 	self:RunLevel()
 end
 
